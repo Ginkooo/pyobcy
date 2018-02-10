@@ -17,6 +17,7 @@ class Obcy():
             self._init_driver()
             self._connect()
             self._choose_location(location)
+            self._start_conversation()
 
     def _init_driver(self):
         """initialize webdriver"""
