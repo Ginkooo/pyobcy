@@ -1,5 +1,7 @@
 from collections import namedtuple
 
+from selenium.webdriver.common.keys import Keys
+
 import config
 
 
@@ -45,3 +47,9 @@ class Chat():
         msg = Message(author=author, contents=contents)
         self.seen_msg_count += 1
         return msg
+
+    def send_msg(self, text):
+        """send message on chat"""
+        text_area = self.drv.find_element_by_id(config.text_input)
+        text_area.send_keys(text)
+        text_area.send_keys(Keys.RETURN)
