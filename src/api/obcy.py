@@ -1,8 +1,8 @@
 import selenium.webdriver
 
 import config
-from chat import Chat
-from location import Location
+from src.api.chat import Chat
+from src.api.location import Location
 
 
 class DriverNotInitializedException(Exception):
