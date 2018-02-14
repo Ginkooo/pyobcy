@@ -44,8 +44,10 @@ class ChatWindow():
         """draw separator at the bottom of chat area"""
         sep_y, sep_x = (self.pos.y + self.size.height - 2,
                         self.pos.x + self.size.width - 1)
+        up_sep_y, up_sep_x = (self.pos.y - 1, self.pos.x)
         sep = ChatWindow.SEP_CHAR * self.size.width
         self.window.addstr(sep_y, sep_x, sep)
+        self.window.addstr(up_sep_y, up_sep_x, sep)
 
     def clear_chat_area(self):
         """clears chat area by filling it with spaces"""

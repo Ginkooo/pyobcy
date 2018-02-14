@@ -53,3 +53,7 @@ class Chat():
         text_area = self.drv.find_element_by_id(config.text_input)
         text_area.send_keys(text)
         text_area.send_keys(Keys.RETURN)
+
+    def get_status(self):
+        """get conversation status basing on top_static"""
+        return self._top_static.text

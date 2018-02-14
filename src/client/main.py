@@ -3,6 +3,7 @@ import curses
 from src.client.gui.chatwindow import ChatWindow
 from src.client.gui.modewindow import ModeWindow
 from src.client.gui.inputarea import InputArea
+from src.client.gui.statuswindow import StatusWindow
 from src.client.inputreader import InputReader
 from src.client.messagehandler import MessageHandler
 from src.client.mode import INSERT, NORMAL
@@ -15,6 +16,7 @@ def main(stdscr):
     chat = obcy.get_chat()
     chat_window = ChatWindow(stdscr)
     mode_window = ModeWindow(stdscr)
+    status_window = StatusWindow(stdscr)
     input_area = InputArea(stdscr)
     message_handler = MessageHandler(chat_window)
     input_reader = InputReader(stdscr)
@@ -22,6 +24,9 @@ def main(stdscr):
     mode_window.draw_mode_text()
     while True:
         msg = chat.get_last_msg()
+        status = chat.get_status()
+        status_window.status = status
+        status_window.draw()
         if msg:
             message_handler.add_message(msg)
 
@@ -44,6 +49,8 @@ def main(stdscr):
         else:
             if char == ord('`'):
                 mode_window.mode = NORMAL
+            elif char == curses.KEY_BACKSPACE:  # backspace
+                input_area.backspace()
             elif char == ord('\n'):
                 msg = input_area.text
                 chat.send_msg(msg)

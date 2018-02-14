@@ -10,6 +10,7 @@ class InputArea():
         self.pos = self.get_pos()
         self.size = self.get_size()
         self.text = ''
+        self.filled = False
 
     def get_size(self):
         """get input area size"""
@@ -37,10 +38,23 @@ class InputArea():
         try:
             self.window.addstr(y, x, self.text)
         except:
-            raise Exception(y, x, self.text)
+            self.filled = True
 
     def erase(self):
         self.text = ''
 
     def write_str(self, str):
-        self.text += str
+        if not self.filled:
+            self.text += str
+
+    def backspace(self):
+        """delete trailing character"""
+        tmp_len = len(self.text)
+        try:
+            self.text = self.text[0:-1]
+        except IndexError:
+            return
+        else:
+            y = self.pos.y
+            x = self.pos.x + tmp_len - 1
+            self.window.addstr(y, x, ' ')
