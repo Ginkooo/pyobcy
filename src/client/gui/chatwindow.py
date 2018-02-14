@@ -35,7 +35,7 @@ class ChatWindow():
         """
         return Position(
                 x=0,
-                y=0
+                y=1
                 )
 
     def _draw_separator(self):

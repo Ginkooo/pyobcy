@@ -8,7 +8,7 @@ class ModeWindow():
 
     def __init__(self, window):
         self.window = window
-        self.mode = NORMAL
+        self._mode = NORMAL
         self.pos = self.get_pos()
         self.size = self.get_size()
 
@@ -30,5 +30,14 @@ class ModeWindow():
     def draw_mode_text(self):
         self.window.addstr(
                 self.pos.y-1, self.pos.x,
-                self.mode.text
+                self._mode.text
                 )
+
+    @property
+    def mode(self):
+        return self._mode
+
+    @mode.setter
+    def mode(self, mode):
+        assert mode in (INSERT, NORMAL)
+        self._mode = mode

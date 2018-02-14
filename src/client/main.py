@@ -1,7 +1,9 @@
 import curses
+
 from src.client.gui.chatwindow import ChatWindow
 from src.client.gui.modewindow import ModeWindow
 from src.client.inputreader import InputReader
+from src.client.mode import INSERT, NORMAL
 
 
 def main(stdscr):
@@ -16,12 +18,18 @@ def main(stdscr):
         char = input_reader.read_next_char()
         if not char:
             continue
-        if char == ord('j'):
-            chat_window.scroll('down')
-        if char == ord('k'):
-            chat_window.scroll('up')
-        if char == ord('q'):
-            exit()
+        if mode_window.mode == NORMAL:
+            if char == ord('j'):
+                chat_window.scroll('down')
+            if char == ord('k'):
+                chat_window.scroll('up')
+            if char == ord('q'):
+                exit()
+            if char == ord('i'):
+                mode_window.mode = INSERT
+        else:
+            if char == ord('`'):  # ESC
+                mode_window.mode = NORMAL
 
         chat_window.redraw_chat()
         mode_window.draw_mode_text()
