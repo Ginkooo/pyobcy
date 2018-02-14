@@ -1,25 +1,26 @@
 import curses
-
-from src.client.drawer import Drawer
-from src.client.inputthread import InputThread
-from src.client.inputhandler import InputHandler, Exit
+from src.client.gui.chatwindow import ChatWindow
+from src.client.inputreader import InputReader
 
 
 def main(stdscr):
-    drawer = Drawer(stdscr)
-    msgs = (f'dupa {i}' * 22 for i in range(10000))
-    for msg in msgs:
-        drawer.add_message(msg)
-    input_handler = InputHandler(drawer)
-    drawer.redraw()
-    is_changed = False
+    chat_window = ChatWindow(stdscr)
+    input_reader = InputReader(stdscr)
+    chat_window._draw_separator()
+    chat_window.lines = [f'dupa {i}' for i in range(100)]
+    chat_window.redraw_chat()
     while True:
-        if is_changed:
-            drawer.redraw()
-        try:
-            is_changed = input_handler.react()
-        except Exit:
-            break
+        char = input_reader.read_next_char()
+        if not char:
+            continue
+        if char == ord('j'):
+            chat_window.scroll('down')
+        if char == ord('k'):
+            chat_window.scroll('up')
+        if char == ord('q'):
+            exit()
+
+        chat_window.redraw_chat()
 
 
 curses.wrapper(main)
