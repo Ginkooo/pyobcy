@@ -23,7 +23,7 @@ class ChatWindow():
         chat_pos = self.get_pos()
         chat_y, chat_x = chat_pos.y, chat_pos.x
         size = Size(
-                height=win_y - chat_y,
+                height=win_y - chat_y-1,
                 width=win_x - chat_x
             )
         return size
