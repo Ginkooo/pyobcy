@@ -44,6 +44,8 @@ def main(stdscr):
                 chat_window.scroll('up')
             if char == ord('q'):
                 break
+            if chat == ord('n'):
+                chat.start_new_conversation()
             if char == ord('i'):
                 mode_window.mode = INSERT
         else:
