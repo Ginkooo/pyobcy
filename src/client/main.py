@@ -33,7 +33,6 @@ def main(stdscr):
             if char == ord('`'):
                 mode_window.mode = NORMAL
             elif char == ord('\n'):
-                curses.flushinp()
                 msg = input_area.text
                 input_area.erase()
             else:
