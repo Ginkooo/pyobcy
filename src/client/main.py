@@ -38,7 +38,7 @@ def main(stdscr):
             if char == ord('k'):
                 chat_window.scroll('up')
             if char == ord('q'):
-                exit()
+                break
             if char == ord('i'):
                 mode_window.mode = INSERT
         else:
