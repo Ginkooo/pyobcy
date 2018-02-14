@@ -2,6 +2,7 @@ import curses
 
 from src.client.gui.chatwindow import ChatWindow
 from src.client.gui.modewindow import ModeWindow
+from src.client.gui.inputarea import InputArea
 from src.client.inputreader import InputReader
 from src.client.mode import INSERT, NORMAL
 
@@ -9,6 +10,7 @@ from src.client.mode import INSERT, NORMAL
 def main(stdscr):
     chat_window = ChatWindow(stdscr)
     mode_window = ModeWindow(stdscr)
+    input_area = InputArea(stdscr)
     input_reader = InputReader(stdscr)
     chat_window._draw_separator()
     chat_window.lines = [f'dupa {i}' for i in range(100)]
@@ -28,11 +30,18 @@ def main(stdscr):
             if char == ord('i'):
                 mode_window.mode = INSERT
         else:
-            if char == ord('`'):  # ESC
+            if char == ord('`'):
                 mode_window.mode = NORMAL
+            elif char == ord('\n'):
+                curses.flushinp()
+                msg = input_area.text
+                input_area.erase()
+            else:
+                input_area.write_str(chr(char))
 
         chat_window.redraw_chat()
         mode_window.draw_mode_text()
+        input_area.draw_input_text()
 
 
 curses.wrapper(main)
