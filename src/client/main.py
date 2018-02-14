@@ -4,19 +4,31 @@ from src.client.gui.chatwindow import ChatWindow
 from src.client.gui.modewindow import ModeWindow
 from src.client.gui.inputarea import InputArea
 from src.client.inputreader import InputReader
+from src.client.messagehandler import MessageHandler
 from src.client.mode import INSERT, NORMAL
+from src.api.obcy import Obcy
+
+obcy = Obcy()
 
 
 def main(stdscr):
+    chat = obcy.get_chat()
     chat_window = ChatWindow(stdscr)
     mode_window = ModeWindow(stdscr)
     input_area = InputArea(stdscr)
+    message_handler = MessageHandler(chat_window)
     input_reader = InputReader(stdscr)
     chat_window._draw_separator()
-    chat_window.lines = [f'dupa {i}' for i in range(100)]
-    chat_window.redraw_chat()
     mode_window.draw_mode_text()
     while True:
+        msg = chat.get_last_msg()
+        if msg:
+            message_handler.add_message(msg)
+
+            chat_window.redraw_chat()
+            mode_window.draw_mode_text()
+            input_area.draw_input_text()
+
         char = input_reader.read_next_char()
         if not char:
             continue
@@ -34,6 +46,7 @@ def main(stdscr):
                 mode_window.mode = NORMAL
             elif char == ord('\n'):
                 msg = input_area.text
+                chat.send_msg(msg)
                 input_area.erase()
             else:
                 input_area.write_str(chr(char))
@@ -44,3 +57,5 @@ def main(stdscr):
 
 
 curses.wrapper(main)
+
+obcy.close()

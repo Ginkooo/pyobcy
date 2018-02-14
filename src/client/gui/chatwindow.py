@@ -1,3 +1,5 @@
+import textwrap
+
 from src.client.gui.dimensions import Position, Size
 
 
@@ -85,3 +87,14 @@ class ChatWindow():
                 return None
             self._scroll_start += 1
             self._scroll_end += 1
+
+    def print_msg(self, msg):
+        """split message in width-matching lines and add them to self.lines,
+        also scroll down
+
+        :param msg: message to print
+        """
+        lines = textwrap.wrap(str(msg), self.size.width - 1)
+        self.lines.extend(lines)
+        for line in lines:
+            self.scroll('down')

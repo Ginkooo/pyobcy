@@ -34,7 +34,10 @@ class InputArea():
             spaces = ' ' * (self.size.width - 1)
             self.window.addstr(y, x, spaces)
             return None
-        self.window.addstr(y, x, self.text)
+        try:
+            self.window.addstr(y, x, self.text)
+        except:
+            raise Exception(y, x, self.text)
 
     def erase(self):
         self.text = ''
