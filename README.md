@@ -28,6 +28,13 @@ Usage
 `./6obcy.py`
 
 
+TODO
+=====
+* resize window (it's crashing)
+* handle multiline input
+* output messages in neater format, add corors and stuff
+
+
 LICENSE
 =======
 My code is licenced under GPLv3
