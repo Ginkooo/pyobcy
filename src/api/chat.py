@@ -25,6 +25,11 @@ class Chat():
         self.msg_count = 0
         self.seen_msg_count = 0
 
+        disconnected = config.chat_disconnected
+        self.end = self.drv.find_element_by_class_name(disconnected)
+        str_typ = config.chat_stranger_typing
+        self.writing = self.drv.find_element_by_id(str_typ)
+
     def click_wait_ok_btn(self):
         buttons = self.drv.find_elements_by_tag_name('button')
         for btn in buttons:
@@ -71,22 +76,10 @@ class Chat():
 
     def get_status(self):
         """get conversation status basing on top_static"""
-        try:
-            disconnected = config.chat_disconnected
-            end = self.drv.find_element_by_class_name(disconnected)
-        except NoSuchElementException:
-            end = None
-        try:
-            str_typ = config.chat_stranger_typing
-            writing = self.drv.find_element_by_id(str_typ)
-        except NoSuchElementException:
-            writing = None
-        if writing:
-            if 'none' not in writing.get_attribute('style'):
-                return writing.text
-        if end:
-            if 'none' not in end.get_attribute('style'):
-                return 'Disconnected'
+        if 'none' not in self.writing.get_attribute('style'):
+            return self.writing.text
+        if 'none' not in self.end.get_attribute('style'):
+            return 'Disconnected'
         return self._top_static.text
 
     def start_new_conversation(self):
