@@ -24,11 +24,17 @@ class StatusWindow():
                 height=1
                 )
 
+    def clear_status(self):
+        y, x = self.pos.y, self.pos.x
+        spaces = ' ' * (self.size.width - 1)
+        self.window.addstr(y, x, spaces)
+
     def draw(self):
         """draw status on screen"""
         if self._status == self._prev_status:
             return
         y, x = self.pos.y, self.pos.x
+        self.clear_status()
         self.window.addstr(y, x, self.status)
 
     @property

@@ -1,4 +1,5 @@
 import selenium.webdriver
+from selenium.webdriver.firefox.options import Options
 
 import config
 from src.api.chat import Chat
@@ -21,7 +22,9 @@ class Obcy():
 
     def _init_driver(self):
         """initialize webdriver"""
-        self.drv = selenium.webdriver.Firefox()
+        options = Options()
+        options.add_argument('--headless')
+        self.drv = selenium.webdriver.Firefox(firefox_options=options)
 
     def _connect(self):
         """connect to 6obcy"""

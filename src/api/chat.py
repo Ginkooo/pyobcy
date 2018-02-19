@@ -1,7 +1,10 @@
 from collections import namedtuple
+from time import sleep
 
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import (NoSuchElementException,
+                                        ElementNotInteractableException,
+                                        ElementClickInterceptedException)
 
 import config
 
@@ -21,6 +24,13 @@ class Chat():
         self._button = drv.find_element_by_class_name('first-button')
         self.msg_count = 0
         self.seen_msg_count = 0
+
+    def click_wait_ok_btn(self):
+        buttons = self.drv.find_elements_by_tag_name('button')
+        for btn in buttons:
+            if btn.text == 'OK':
+                button = btn
+        button.click()
 
     def get_msg_count(self):
         """count all messages"""
@@ -53,26 +63,42 @@ class Chat():
     def send_msg(self, text):
         """send message on chat"""
         text_area = self.drv.find_element_by_id(config.text_input)
-        text_area.send_keys(text)
-        text_area.send_keys(Keys.RETURN)
+        try:
+            text_area.send_keys(text)
+            text_area.send_keys(Keys.RETURN)
+        except ElementNotInteractableException:
+            pass
 
     def get_status(self):
         """get conversation status basing on top_static"""
         try:
-            end = self._bottom_static.find_element_by_class_name('log-static-end-talk')
+            disconnected = config.chat_disconnected
+            end = self.drv.find_element_by_class_name(disconnected)
         except NoSuchElementException:
             end = None
         try:
-            writing = self._bottom_static.find_element_by_class_name('log-static-inner')
+            str_typ = config.chat_stranger_typing
+            writing = self.drv.find_element_by_id(str_typ)
         except NoSuchElementException:
             writing = None
         if writing:
-            return writing.text
+            if 'none' not in writing.get_attribute('style'):
+                return writing.text
         if end:
-            return 'Disconnected'
+            if 'none' not in end.get_attribute('style'):
+                return 'Disconnected'
         return self._top_static.text
 
     def start_new_conversation(self):
         """end current convo and start a new one"""
-        for _ in range(3):
-            self._button.click()
+        self.msg_count = 0
+        self.seen_msg_count = 0
+        while True:
+            try:
+                for _ in range(3):
+                    self._button.click()
+            except ElementClickInterceptedException:
+                sleep(1)
+                self.click_wait_ok_btn()
+            else:
+                break
