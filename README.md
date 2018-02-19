@@ -25,7 +25,7 @@ How to install
 
 Usage
 =====
-`./6obcy.py'
+`./6obcy.py`
 
 
 LICENSE
